@@ -4,6 +4,25 @@
 #include "config.h"
 
 
+static gboolean on_key_press(GtkWidget *window, GdkEventKey *event, gpointer user_data)
+{
+	if (event->type != GDK_KEY_PRESS)
+		return FALSE;
+	VteTerminal *terminal = VTE_TERMINAL (user_data);
+	if ((event->state & GDK_CONTROL_MASK) && (event->state & GDK_SHIFT_MASK)) {
+		switch (event->keyval) {
+			case GDK_KEY_C:
+			vte_terminal_copy_clipboard (terminal);
+			return TRUE;
+			case GDK_KEY_V:
+			vte_terminal_paste_clipboard (terminal);
+			return TRUE;
+		}
+	}
+	return FALSE;
+	
+}
+
 int main(int argc, char **argv) {
 	gtk_init(&argc, &argv);
 
@@ -14,6 +33,7 @@ int main(int argc, char **argv) {
 
 	g_signal_connect(window, "delete_event", gtk_main_quit, NULL);
 
+	g_signal_connect(G_OBJECT(window), "key-press-event", G_CALLBACK(on_key_press), vte);
 	g_signal_connect(vte, "child-exited", gtk_main_quit, NULL);
 
 	char *shell[2] = {SHELL, NULL};
