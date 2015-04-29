@@ -15,3 +15,6 @@ include_directories (${VTE_INCLUDE_DIRS})
 add_executable(tem tem.c)
 
 target_link_libraries(tem ${GTK3_LIBRARIES} ${VTE_LIBRARIES})
+
+install (TARGETS tem
+    RUNTIME DESTINATION /usr/bin)
