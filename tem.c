@@ -53,18 +53,29 @@ int main(int argc, char **argv) {
 	gtk_init(&argc, &argv);
 
 	GtkWindow *window = GTK_WINDOW(gtk_window_new(GTK_WINDOW_TOPLEVEL));
+
+	//VTE settings
 	VteTerminal *vte = VTE_TERMINAL(vte_terminal_new());
+	vte_terminal_set_mouse_autohide      (vte, TRUE);
+    vte_terminal_set_audible_bell        (vte, FALSE);
+    vte_terminal_set_scroll_on_output    (vte, FALSE);
+    vte_terminal_set_scroll_on_keystroke (vte, TRUE);
+
+
 	gtk_container_add(GTK_CONTAINER(window), GTK_WIDGET(vte));
+	gtk_widget_show_all(GTK_WIDGET(window));
 
+	//Placeholder
+	char *shell[2] = {SHELL, NULL};
 
+	//Spawn 
+	vte_terminal_spawn_sync(vte, 0, NULL, shell, NULL, 0, NULL, NULL, NULL, NULL, NULL);
+	
+	//Bind Signals
 	g_signal_connect(window, "delete_event", G_CALLBACK(do_quit), NULL);
-
-	g_signal_connect(G_OBJECT(window), "key-press-event", G_CALLBACK(on_key_press), vte);
+	g_signal_connect(window, "key-press-event", G_CALLBACK(on_key_press), vte);
 	g_signal_connect(vte, "child-exited", G_CALLBACK(do_quit), NULL);
 
-	char *shell[2] = {SHELL, NULL};
-	vte_terminal_spawn_sync(vte, 0, NULL, shell, NULL, 0, NULL, NULL, NULL, NULL, NULL);
-	gtk_widget_show_all(GTK_WIDGET(window));
 	gtk_main();
 	return 0;
 }
