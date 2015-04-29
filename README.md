@@ -2,6 +2,9 @@
 
 | Key Binding | Command  |
 |---|---|
-| CTRL SHIFT C  | Copy |
-| CTRL SHIFT V  | Paste |
-| CTRL SHIFT Q  | Quit |
+| ``ctrl-shift-c``  | Copy |
+| ``ctrl-shift-v``  | Paste |
+| ``ctrl-shift-q``  | Quit |
+| ``shift-pageup``  | Scroll up a page |
+| ``shift-pagedown``  | Scroll down a page |
+
